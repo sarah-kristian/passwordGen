@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const process = require('node:process');
+const args = process.argv.slice(2);
 
 /**
  * Generates a random character
@@ -22,7 +23,10 @@ function getRandomCharacter() {
  */
 
 
-function generatePassword(passwordLength) {
+function generatePassword(passwordLength = 8) {
+    // Ensure passwordLength is an integer and set default if not
+    passwordLength = Number.isInteger(passwordLength) ? passwordLength : 8;
+
     let password = "";
     let character;
 
@@ -57,15 +61,48 @@ Example:
  * @param {string[]} userArguments The arguments provided by the user
  */
 
-function handleArguments(userArguments) {
-    if (userArguments.length === 0) {
-        printHelpMessage();
-        return;
+
+function parseArguments(args) {
+    // const options = {
+    //     length: 8, // default length
+    // };
+
+    let length = 8;
+
+    for (let i = 0; i < args.length; i++) {
+        switch (args[i]) {
+            case '--length':
+                if (i + 1 < args.length && !isNaN(parseInt(args[i + 1], 10))) {
+                    length = parseInt(args[i + 1], 10);
+                    i++;
+                }else{
+                    console.log('error: expecting an integer after --length. A default length of 8 will be used.')
+                } 
+                break;
+
+            case '--help':
+                printHelpMessage();
+                break;
+
+            default : 
+                console.log('argument not understood. Type --help for help.')
+        }
     }
 
-    if (userArguments.length === 1) {
-        userArguments = userArguments[0].split(" ");
-    }
+    return length;
+}
+
+
+function handleArguments(userArguments) {
+    length = parseArguments(args);
+
+    // if (userArguments.includes('--length')) {
+    //     console.log(arguments);
+    //     length = userArguments[0].split(" ");
+    // }
+    // // if (userArguments.length === 1) {
+    // //     userArguments = userArguments[0].split(" ");
+    // // }
 
     try {
         const result = generatePassword(userArguments);
@@ -75,6 +112,7 @@ function handleArguments(userArguments) {
         console.error(`Error: ${error.message}`);
         printHelpMessage();
     }
+
 }
 
-handleArguments(process.argv.slice(2));
+handleArguments(args);
