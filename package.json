@@ -1,0 +1,24 @@
+{
+  "name": "passwordgen",
+  "version": "1.0.0",
+  "description": "basic command line password generator",
+  "main": "index.js",
+  "scripts": {
+    "start": "node passwordGen.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarah-kristian/password_generator.git"
+  },
+  "keywords": [
+    "password",
+    "generator"
+  ],
+  "author": "Sarah Perry",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sarah-kristian/password_generator/issues"
+  },
+  "homepage": "https://github.com/sarah-kristian/password_generator#readme"
+}
