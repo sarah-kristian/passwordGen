@@ -70,6 +70,7 @@ function generatePass(passwordLength = 8, options = []) {
 /**
  * Prints the help message
  */
+
 function printHelpMessage() {
     let helpMessage = `Usage: [option]
 
@@ -145,6 +146,7 @@ function handleArguments(args) {
               options.push('nums')
               break
           case '--symbols':
+          case '--symbol':
               options.push('symbols')
               break
           case '--upper':
