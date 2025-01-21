@@ -4,47 +4,73 @@ const process = require('node:process');
 const args = process.argv.slice(2);
 
 
-/**
- * Generates a random character
- * 
- * @returns string of random lower case letters
- */
 
-function getRandomCharacter() {
-    const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    let randomIndex = Math.floor(Math.random() * alphabet.length);
-    return alphabet[randomIndex];
+function getRandomCharacter(charList) {
+    let randomIndex = Math.floor(Math.random() * charList.length);
+    return charList[randomIndex];
   }
+
+
+function shuffleString(str) {
+    let array = str.split(''); // Convert the string to an array of characters
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // Random index from 0 to i
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array.join(''); // Convert the array back into a string
+}
 
 
 /**
  * Generates a random password
  * 
  * @param {number} paswordLength length of the password
- * @returns string of random lower case letters
+ * @param {[]} options is a list of options (upper, nums, symbols) 
+ * @returns string of random characters
  */
 
 
-function generatePassword(passwordLength = 8) {
-    // Ensure passwordLength is an integer and set default if not
-    passwordLength = Number.isInteger(passwordLength) ? passwordLength : 8;
 
-    let password = "";
-    let character;
+function generatePass(passwordLength = 8, options = []) {
 
-    for (let i = 1; i <= passwordLength; i++) {
-        character = getRandomCharacter()
-        password = password + character
-      };
-    
-    return password;
+  const lowerAlpha = "abcdefghijklmnopqrstuvwxyz";
+  const upper = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
+  const symbols = "!@#$%^&*()_+-=[]{}|;:',.<>?/";
+  const nums = "0123456789";
+
+  let password = "";
+  let charList = lowerAlpha;
+  password += getRandomCharacter(lowerAlpha)
+
+    for (let i = 0; i < options.length; i++) {
+      switch (options[i]) {
+          case 'upper':
+            charList = charList + upper;
+            password += getRandomCharacter(upper)
+            break;
+          case 'nums':
+            charList = charList + nums;
+            password += getRandomCharacter(nums)
+            break;
+          case 'symbols':
+            charList = charList + symbols;
+            password += getRandomCharacter(symbols)
+            break;
+      }
+    }
+  
+  for (let i = (1 + options.length); i <= passwordLength; i++) {
+      password += getRandomCharacter(charList)
+    };
+  
+  password = shuffleString(password);
+  return password;
 }
-
-
 
 /**
  * Prints the help message
  */
+
 function printHelpMessage() {
     let helpMessage = `Usage: [option]
 
@@ -53,23 +79,36 @@ function printHelpMessage() {
                             Example: --length 5
                             Result: abcde
     
+      --num                 Include numbers (0-9) in the password.
+                            Example: --num
+                            Result: a8bc7de6
+
+      --upper               Include uppercase characters.
+                            Example: --upper
+                            Result: abcDeFgh
+
+      --symbol              Include ASCII symbols.
+                            Example: --symbols
+                            Result: abcDe$!h
+                                            
       --help                Display this help message and exit.
-    
+
+      
     Description:
-      This tool generates a random password consisting of lowercase letters. 
-      You can specify the length of the password using the '--length' option. 
-      If no length is provided, the default password length is 8 characters.
+      This tool generates a random password. By default, the password contains 
+      8 lowercase characters. You can customize the length of the password using 
+      the '--length' option. You can also add upper case, numbers, or symbols to 
+      the password using the flags above.
       
     Examples:
-      node passwordGen.js --length 12
-      Result: Random 12 character password.
+      node passwordGen.js --length 12 --num
+      Result: Random 12 character password that includes lowercase characters and numbers.
     
       node passwordGen.js --help
       Displays help information.
     
     Notes:
       - If an invalid length is provided after '--length', the application will revert to the default length.
-      - The password is purely alphabetical and does not include numbers or special characters.
         `;
     
         console.log(helpMessage);
@@ -84,40 +123,49 @@ function printHelpMessage() {
 
 
 function handleArguments(args) {
-    // const options = {
-    //     length: 8, // default length
-    // };
+  const options = []
+  let length = 8;
 
-    if (args.length === 0) {
-      printHelpMessage();
-      return;
-  }
-
-    for (let i = 0; i < args.length; i++) {
-        switch (args[i]) {
-            case '--length':
-                let length = 8;
-                if (i + 1 < args.length && !isNaN(parseInt(args[i + 1], 10))) {
-                    length = parseInt(args[i + 1], 10);
-                    const result = generatePassword(length);
-                    console.log(`Password: ${result}`);
-                    i++;
-                }else{
-                    console.log('error: Expected an integer after --length. A default length of 8 was used.')
-                } 
-                break;
-
-            case '--h':
-            case '--help':
-                printHelpMessage();
-                break;
-
-            default : 
-                console.log('argument not understood. Type --help for help.')
-                return;
-        }
-    }
+  if (args.length === 0) {
+    printHelpMessage();
+    return;
 }
 
+  for (let i = 0; i < args.length; i++) {
+      switch (args[i]) {
+          case '--length':
+              if (i + 1 < args.length && !isNaN(parseInt(args[i + 1], 10))) {
+                  length = parseInt(args[i + 1], 10);
+                  i++;
+              } else {
+                  console.log('Note: Expected an integer after --length. A default length of 8 was used.');
+              } 
+              break;
+          case '--num':
+          case '--nums':
+              options.push('nums')
+              break
+          case '--symbols':
+          case '--symbol':
+              options.push('symbols')
+              break
+          case '--upper':
+              options.push('upper')
+              break
+          case '--h':
+          case '--help':
+              printHelpMessage();
+              break;
+
+          default : 
+              console.log('Argument not understood. Type --help for help.\n')
+              return;
+      }
+  }
+
+result = generatePass(length, options);
+console.log('password: ' + result + '\n');
+}
 
 handleArguments(args);
+//console.log(generatePass(8, ['--upper', '--nums']))
