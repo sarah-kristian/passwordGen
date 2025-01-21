@@ -1,7 +1,8 @@
 CLI Password Generator
-  This tool generates a random password consisting of lowercase letters. 
-  You can specify the length of the password using the '--length' option. 
-  If no length is provided, the default password length is 8 characters.
+    This tool generates a random password. By default, the password contains 
+    8 lowercase characters. You can customize the length of the password using 
+    the '--length' option. You can also add upper case, numbers, or symbols to 
+    the password using the flags --upper, -nums, -symbols.
 
 Instructions
   Run the app with either npx getPassword or npm ./index.js
