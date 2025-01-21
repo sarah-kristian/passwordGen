@@ -4,13 +4,22 @@ const process = require('node:process');
 const args = process.argv.slice(2);
 
 
-
+/**
+ * Returns a random character from a given character set.
+ * @param {string} charList - A string representing a list of characters.
+ * @returns {string} A single random character from the provided list.
+ */
 function getRandomCharacter(charList) {
     let randomIndex = Math.floor(Math.random() * charList.length);
     return charList[randomIndex];
   }
 
 
+/**
+ * Shuffles the characters in a given string.
+ * @param {string} str - The string to shuffle.
+ * @returns {string} A new string with shuffled characters.
+ */
 function shuffleString(str) {
     let array = str.split(''); // Convert the string to an array of characters
     for (let i = array.length - 1; i > 0; i--) {
@@ -25,11 +34,9 @@ function shuffleString(str) {
  * Generates a random password
  * 
  * @param {number} paswordLength length of the password
- * @param {[]} options is a list of options (upper, nums, symbols) 
- * @returns string of random characters
+ * @param {string[]} options is a list of options (upper, nums, symbols) 
+ * @returns {string} generated password
  */
-
-
 
 function generatePass(passwordLength = 8, options = []) {
 
@@ -118,9 +125,8 @@ function printHelpMessage() {
 /**
  * Handles the arguments provided to the application by the user.
  * 
- * @param {string[]} args The arguments provided by the user
+ * @param {string[]} args The arguments provided by the user.
  */
-
 
 function handleArguments(args) {
   const options = []
@@ -167,5 +173,6 @@ result = generatePass(length, options);
 console.log('password: ' + result + '\n');
 }
 
+
+// Main program execution starts here
 handleArguments(args);
-//console.log(generatePass(8, ['--upper', '--nums']))
