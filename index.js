@@ -48,10 +48,10 @@ function printHelpMessage() {
     the password using the flags above.
     
   Examples:
-    node passwordGen.js --length 12 --num
+    node passwordgen.js --length 12 --num
     Result: Random 12 character password that includes lowercase characters and numbers.
   
-    node passwordGen.js --help
+    node passwordgen.js --help
     Displays help information.
   
   Notes:
