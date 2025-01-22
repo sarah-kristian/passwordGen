@@ -4,22 +4,11 @@ const process = require('node:process');
 const args = process.argv.slice(2);
 
 
-/**
- * Returns a random character from a given character set.
- * @param {string} charList - A string representing a list of characters.
- * @returns {string} A single random character from the provided list.
- */
 function getRandomCharacter(charList) {
     let randomIndex = Math.floor(Math.random() * charList.length);
     return charList[randomIndex];
   }
 
-
-/**
- * Shuffles the characters in a given string.
- * @param {string} str - The string to shuffle.
- * @returns {string} A new string with shuffled characters.
- */
 function shuffleString(str) {
     let array = str.split(''); // Convert the string to an array of characters
     for (let i = array.length - 1; i > 0; i--) {
@@ -27,6 +16,49 @@ function shuffleString(str) {
         [array[i], array[j]] = [array[j], array[i]]; // Swap elements
     }
     return array.join(''); // Convert the array back into a string
+}
+
+function printHelpMessage() {
+  let helpMessage = `Usage: [option]
+
+  Options:
+    --length [integer]    Generate a password of specified length. Default is 8.
+                          Example: --length 5
+                          Result: abcde
+  
+    --num                 Include numbers (0-9) in the password.
+                          Example: --num
+                          Result: a8bc7de6
+
+    --upper               Include uppercase characters.
+                          Example: --upper
+                          Result: abcDeFgh
+
+    --symbol              Include ASCII symbols.
+                          Example: --symbols
+                          Result: abcDe$!h
+                                          
+    --help                Display this help message and exit.
+
+    
+  Description:
+    This tool generates a random password. By default, the password contains 
+    8 lowercase characters. You can customize the length of the password using 
+    the '--length' option. You can also add upper case, numbers, or symbols to 
+    the password using the flags above.
+    
+  Examples:
+    node passwordGen.js --length 12 --num
+    Result: Random 12 character password that includes lowercase characters and numbers.
+  
+    node passwordGen.js --help
+    Displays help information.
+  
+  Notes:
+    - If an invalid length is provided after '--length', the application will revert to the default length.
+      `;
+  
+      console.log(helpMessage);
 }
 
 
@@ -72,53 +104,6 @@ function generatePass(passwordLength = 8, options = []) {
   
   password = shuffleString(password);
   return password;
-}
-
-/**
- * Prints the help message
- */
-
-function printHelpMessage() {
-    let helpMessage = `Usage: [option]
-
-    Options:
-      --length [integer]    Generate a password of specified length. Default is 8.
-                            Example: --length 5
-                            Result: abcde
-    
-      --num                 Include numbers (0-9) in the password.
-                            Example: --num
-                            Result: a8bc7de6
-
-      --upper               Include uppercase characters.
-                            Example: --upper
-                            Result: abcDeFgh
-
-      --symbol              Include ASCII symbols.
-                            Example: --symbols
-                            Result: abcDe$!h
-                                            
-      --help                Display this help message and exit.
-
-      
-    Description:
-      This tool generates a random password. By default, the password contains 
-      8 lowercase characters. You can customize the length of the password using 
-      the '--length' option. You can also add upper case, numbers, or symbols to 
-      the password using the flags above.
-      
-    Examples:
-      node passwordGen.js --length 12 --num
-      Result: Random 12 character password that includes lowercase characters and numbers.
-    
-      node passwordGen.js --help
-      Displays help information.
-    
-    Notes:
-      - If an invalid length is provided after '--length', the application will revert to the default length.
-        `;
-    
-        console.log(helpMessage);
 }
 
 
@@ -175,4 +160,5 @@ console.log('password: ' + result + '\n');
 
 
 // Main program execution starts here
+
 handleArguments(args);
