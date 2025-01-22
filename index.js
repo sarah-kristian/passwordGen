@@ -98,7 +98,7 @@ function generatePass(passwordLength = 8, options = []) {
       }
     }
   
-  for (let i = (1 + options.length); i <= passwordLength; i++) {
+  for (let i = (2 + options.length); i <= passwordLength; i++) {
       password += getRandomCharacter(charList)
     };
   
@@ -127,6 +127,10 @@ function handleArguments(args) {
           case '--length':
               if (i + 1 < args.length && !isNaN(parseInt(args[i + 1], 10))) {
                   length = parseInt(args[i + 1], 10);
+                  if (length < 4) {
+                    length = 4;
+                    console.log('Note: Length cannot be less than 4. The minimum length of 4 was used.')
+                  }
                   i++;
               } else {
                   console.log('Note: Expected an integer after --length. A default length of 8 was used.');
